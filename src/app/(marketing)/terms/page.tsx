@@ -27,9 +27,9 @@ export default function TermsPage() {
           <h2 className="text-2xl font-semibold mb-4 text-foreground">2. Service Description</h2>
           <p className="text-muted leading-relaxed">
             UnMask AI provides AI-powered audio deepfake detection through a web
-            interface, REST API, and WhatsApp bot. The service analyzes audio
-            files and provides a confidence score indicating whether the audio
-            is authentic or AI-generated.
+            interface and WhatsApp bot. The service analyzes audio files and
+            provides a confidence score indicating whether the audio is
+            authentic or AI-generated.
           </p>
         </section>
 

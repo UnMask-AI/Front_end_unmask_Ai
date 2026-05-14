@@ -14,10 +14,12 @@ import {
 } from "lucide-react";
 import { AUDIO_CONFIG } from "@/lib/constants";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
-import { api } from "@/lib/api";
+import { analyzeAudioFile } from "@/lib/services/analyze.service";
+import { useAuth } from "@/providers/AuthProvider";
 import type { UploadState } from "@/lib/types";
 
 export default function AudioAnalyzer() {
+  const { token } = useAuth();
   const [uploadState, setUploadState] = useState<UploadState>({
     status: "idle",
     progress: 0,
@@ -64,7 +66,7 @@ export default function AudioAnalyzer() {
     setUploadState({ status: "uploading", progress: 0 });
 
     try {
-      const result = await api.analyzeAudio(selectedFile, undefined, (progress) => {
+      const result = await analyzeAudioFile(selectedFile, token ?? undefined, (progress) => {
         setUploadState((prev) => ({
           ...prev,
           status: "uploading",

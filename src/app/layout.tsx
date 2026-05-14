@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { AuthProvider } from "@/providers/AuthProvider";
 
 const themeScript = `
 (function() {
@@ -28,7 +27,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "UnMask AI — Audio Deepfake Detection",
   description:
-    "Advanced AI-powered audio deepfake detection. Upload audio and instantly know if it's real or AI-generated. REST API & WhatsApp bot included.",
+    "Advanced AI-powered audio deepfake detection. Upload audio and instantly know if it's real or AI-generated. WhatsApp bot included.",
   keywords: [
     "deepfake detection",
     "audio deepfake",
@@ -59,9 +58,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
         <ThemeProvider>
-          <Navbar />
-          <main className="min-h-screen">{children}</main>
-          <Footer />
+          <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
       </body>
     </html>

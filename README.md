@@ -1,40 +1,46 @@
-<<<<<<< HEAD
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# UnMask AI — Frontend
 
-## Getting Started
+Next.js (App Router) marketing site, auth, dashboard, and analyze UI.
 
-First, run the development server:
+## Setup
 
 ```bash
+npm install
+cp .env.example .env.local   # already committed template; .env.local is gitignored
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Important:** `NEXT_PUBLIC_*` values are read when the dev server **starts**. After editing `.env.local`, stop the server (Ctrl+C) and run `npm run dev` again. If the UI still says it cannot reach the API, open `http://localhost:8000/` in the browser to confirm the backend is up, then check `docker compose` logs if you use Docker.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open [http://localhost:3000](http://localhost:3000).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Backend connection
 
-## Learn More
+The app calls the API at **`NEXT_PUBLIC_API_URL`** (must include the **`/api/v1`** prefix). Default in code is `http://localhost:8000/api/v1`.
 
-To learn more about Next.js, take a look at the following resources:
+1. Start the backend (see **`../backend_UnMask-AI/README.md`**). With Docker, run compose from **`backend_UnMask-AI/docker`**, not from a path that does not contain that folder.
+2. Ensure **`.env.local`** exists (copy from **`.env.example`**) and matches where the API listens.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+If you see a runtime error like **`__webpack_modules__[moduleId] is not a function`**, delete the build cache and restart dev:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+rm -rf .next
+npm run dev
+```
+
+Also ensure you are not opening the app from a different directory than `Front_end_unmask_Ai` (the repo used to ship an extra root `package-lock.json` that confused Next’s workspace root).
+
+## Scripts
+
+| Command        | Description              |
+| -------------- | ------------------------ |
+| `npm run dev`  | Development server       |
+| `npm run build` | Production build       |
+| `npm run start` | Run production build     |
+| `npm run lint` | ESLint                   |
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Set **`NEXT_PUBLIC_API_URL`** in the project environment to your **HTTPS** API base including `/api/v1`. The browser cannot call `http://localhost` from a deployed site.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-=======
-# Front_end_unmask_Ai
->>>>>>> 020477fa7b0b69559beb82f4678492f58fe8e45b
+See [Next.js deployment](https://nextjs.org/docs/app/building-your-application/deploying).

@@ -7,10 +7,12 @@ import Link from "next/link";
 import { NAV_LINKS } from "@/lib/constants";
 import { navbarVariant, fadeInDown, staggerContainerFast } from "@/lib/animations";
 import ThemeToggle from "@/components/ThemeToggle";
+import { useAuth } from "@/providers/AuthProvider";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const { token } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -68,20 +70,31 @@ export default function Navbar() {
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-3">
             <ThemeToggle />
-            <Link
-              href="#analyze"
-              className="px-4 py-2 text-sm text-muted hover:text-foreground transition-colors"
-            >
-              Sign In
-            </Link>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            {token ? (
               <Link
-                href="#analyze"
+                href="/dashboard"
                 className="px-5 py-2.5 text-sm font-medium bg-accent text-primary-dark rounded-full hover:bg-accent-muted transition-colors shadow-lg shadow-accent/20"
               >
-                Try Free
+                Dashboard
               </Link>
-            </motion.div>
+            ) : (
+              <>
+                <Link
+                  href="/auth/login"
+                  className="px-4 py-2 text-sm text-muted hover:text-foreground transition-colors"
+                >
+                  Sign In
+                </Link>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
+                  <Link
+                    href="/auth/register"
+                    className="px-5 py-2.5 text-sm font-medium bg-accent text-primary-dark rounded-full hover:bg-accent-muted transition-colors shadow-lg shadow-accent/20"
+                  >
+                    Try Free
+                  </Link>
+                </motion.div>
+              </>
+            )}
           </div>
 
           {/* Mobile Toggle */}
@@ -119,18 +132,32 @@ export default function Navbar() {
                 </Link>
               ))}
               <div className="pt-4 border-t border-border space-y-2">
-                <Link
-                  href="#analyze"
-                  className="block text-center px-4 py-3 text-sm text-muted hover:text-foreground transition-colors"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="#analyze"
-                  className="block text-center px-4 py-3 text-sm font-medium bg-accent text-primary-dark rounded-full"
-                >
-                  Try Free
-                </Link>
+                {token ? (
+                  <Link
+                    href="/dashboard"
+                    className="block text-center px-4 py-3 text-sm font-medium bg-accent text-primary-dark rounded-full"
+                    onClick={() => setIsMobileOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                ) : (
+                  <>
+                    <Link
+                      href="/auth/login"
+                      className="block text-center px-4 py-3 text-sm text-muted hover:text-foreground transition-colors"
+                      onClick={() => setIsMobileOpen(false)}
+                    >
+                      Sign In
+                    </Link>
+                    <Link
+                      href="/auth/register"
+                      className="block text-center px-4 py-3 text-sm font-medium bg-accent text-primary-dark rounded-full"
+                      onClick={() => setIsMobileOpen(false)}
+                    >
+                      Try Free
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>

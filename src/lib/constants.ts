@@ -39,7 +39,8 @@ export const NAV_LINKS = [
   { label: "Features", href: "#features" },
   { label: "How It Works", href: "#how-it-works" },
   { label: "Pricing", href: "#pricing" },
-  { label: "API", href: "#api" },
+  { label: "FAQ", href: "#faq" },
+  { label: "Analyze", href: "/analyze" },
   { label: "WhatsApp", href: "#whatsapp" },
 ] as const;
 
@@ -70,7 +71,6 @@ export const PRICING_PLANS = [
       "500 audio analyses per month",
       "Max 30 min audio length",
       "Detailed analysis report",
-      "REST API access",
       "WhatsApp bot access",
       "Priority support",
       "Batch processing",
@@ -88,7 +88,6 @@ export const PRICING_PLANS = [
       "Unlimited audio analyses",
       "No audio length limit",
       "Full forensic report",
-      "REST API + WebSocket",
       "WhatsApp bot (dedicated)",
       "Custom model fine-tuning",
       "24/7 dedicated support",
@@ -112,12 +111,6 @@ export const FEATURES = [
     description:
       "Our model achieves 98.7% accuracy on benchmark datasets, continuously improving with new data.",
     icon: "Target",
-  },
-  {
-    title: "REST API",
-    description:
-      "Integrate deepfake detection directly into your applications with our simple, well-documented API.",
-    icon: "Code2",
   },
   {
     title: "WhatsApp Bot",
@@ -150,7 +143,7 @@ export const HOW_IT_WORKS_STEPS = [
   {
     step: 1,
     title: "Upload Audio",
-    description: "Upload your audio file through our web interface, API, or WhatsApp bot.",
+    description: "Upload your audio file through our web interface or WhatsApp bot.",
   },
   {
     step: 2,
@@ -166,31 +159,3 @@ export const HOW_IT_WORKS_STEPS = [
   },
 ] as const;
 
-export const API_CODE_EXAMPLES = {
-  curl: `curl -X POST "${process.env.NEXT_PUBLIC_API_URL || "https://api.unmask.ai/v1"}/analyze" \\
-  -H "Authorization: Bearer YOUR_API_KEY" \\
-  -F "audio_file=@sample.wav"`,
-
-  python: `import requests
-
-response = requests.post(
-    "https://api.unmask.ai/v1/analyze",
-    headers={"Authorization": "Bearer YOUR_API_KEY"},
-    files={"audio_file": open("sample.wav", "rb")}
-)
-
-result = response.json()
-print(f"Fake: {result['is_fake']} ({result['confidence']}%)")`,
-
-  javascript: `const formData = new FormData();
-formData.append("audio_file", audioFile);
-
-const response = await fetch("https://api.unmask.ai/v1/analyze", {
-  method: "POST",
-  headers: { "Authorization": "Bearer YOUR_API_KEY" },
-  body: formData,
-});
-
-const result = await response.json();
-console.log(\`Fake: \${result.is_fake} (\${result.confidence}%)\`);`,
-} as const;

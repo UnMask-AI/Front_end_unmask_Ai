@@ -1,16 +1,70 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Check, Star } from "lucide-react";
 import Link from "next/link";
 import { PRICING_PLANS } from "@/lib/constants";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
+import type { PlanFromApi } from "@/lib/api";
+import { fetchPlans } from "@/lib/services/plans.service";
+import type { PricingPlan } from "@/lib/types";
+
+function plansFromApi(rows: PlanFromApi[]): PricingPlan[] {
+  return rows.map((p) => {
+    const nameLabel =
+      p.name.length > 0 ? p.name[0].toUpperCase() + p.name.slice(1) : p.name;
+    const period =
+      p.duration_days >= 300 ? "year" : p.duration_days >= 28 ? "month" : "period";
+    const features = [
+      `${p.max_requests_per_month} analyses per month`,
+      `Up to ${Math.round(p.max_audio_duration_sec / 60)} min audio per file`,
+      `Billed every ${p.duration_days} days`,
+    ];
+    return {
+      id: p.name,
+      name: nameLabel,
+      price: p.price,
+      period,
+      description:
+        p.name === "free"
+          ? "Try deepfake detection with monthly limits"
+          : p.name === "basic"
+            ? "More analyses for individuals"
+            : "Best for teams and power users",
+      features,
+      cta: p.name === "free" ? "Get Started" : "Go to analyze",
+      highlighted: p.name === "pro",
+    };
+  });
+}
 
 export default function Pricing() {
+  const [plans, setPlans] = useState<PricingPlan[]>(() =>
+    PRICING_PLANS.map((p) => ({
+      ...p,
+      features: [...p.features],
+    }))
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchPlans()
+      .then((data) => {
+        if (cancelled || !data?.plans?.length) return;
+        setPlans(plansFromApi(data.plans));
+      })
+      .catch(() => {
+        /* keep static PRICING_PLANS */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <section id="pricing" className="relative py-24 sm:py-32 bg-surface/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -18,7 +72,10 @@ export default function Pricing() {
           variants={staggerContainer}
           className="text-center mb-16"
         >
-          <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-accent mb-6">
+          <motion.div
+            variants={fadeInUp}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-accent mb-6"
+          >
             <Star className="w-4 h-4" />
             Pricing
           </motion.div>
@@ -36,7 +93,6 @@ export default function Pricing() {
           </motion.p>
         </motion.div>
 
-        {/* Pricing Cards */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -44,7 +100,7 @@ export default function Pricing() {
           variants={staggerContainer}
           className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto"
         >
-          {PRICING_PLANS.map((plan) => (
+          {plans.map((plan) => (
             <motion.div
               key={plan.id}
               variants={fadeInUp}
@@ -55,7 +111,6 @@ export default function Pricing() {
                   : "glass"
               }`}
             >
-              {/* Popular badge */}
               {plan.highlighted && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                   <div className="px-4 py-1.5 bg-accent text-primary-dark text-xs font-bold rounded-full shadow-lg shadow-accent/30">
@@ -64,7 +119,6 @@ export default function Pricing() {
                 </div>
               )}
 
-              {/* Plan Header */}
               <div className="mb-8">
                 <h3 className="text-lg font-semibold mb-2">{plan.name}</h3>
                 <p className="text-sm text-muted mb-4">{plan.description}</p>
@@ -76,7 +130,6 @@ export default function Pricing() {
                 </div>
               </div>
 
-              {/* Features */}
               <ul className="space-y-3 mb-8">
                 {plan.features.map((feature) => (
                   <li
@@ -89,7 +142,6 @@ export default function Pricing() {
                 ))}
               </ul>
 
-              {/* CTA */}
               <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                 <Link
                   href="#analyze"
@@ -106,7 +158,6 @@ export default function Pricing() {
           ))}
         </motion.div>
 
-        {/* Bottom note */}
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}

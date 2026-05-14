@@ -8,28 +8,28 @@ const footerSections = [
   {
     title: "Product",
     links: [
-      { label: "Features", href: "#features" },
-      { label: "Pricing", href: "#pricing" },
-      { label: "API Docs", href: "#api" },
-      { label: "WhatsApp Bot", href: "#whatsapp" },
+      { label: "Features", href: "/#features" },
+      { label: "Pricing", href: "/#pricing" },
+      { label: "Analyze", href: "/analyze" },
+      { label: "WhatsApp Bot", href: "/#whatsapp" },
     ],
   },
   {
     title: "Company",
     links: [
-      { label: "About Us", href: "#vision" },
+      { label: "About Us", href: "/#vision" },
       { label: "Privacy Policy", href: "/privacy" },
       { label: "Terms of Service", href: "/terms" },
-      { label: "Contact", href: "#contact" },
+      { label: "Contact", href: "/contact" },
     ],
   },
   {
     title: "Resources",
     links: [
-      { label: "Documentation", href: "/docs" },
       { label: "Blog", href: "/blog" },
-      { label: "FAQ", href: "#faq" },
+      { label: "FAQ", href: "/#faq" },
       { label: "Status", href: "/status" },
+      { label: "Cookies", href: "/cookies" },
     ],
   },
 ];
