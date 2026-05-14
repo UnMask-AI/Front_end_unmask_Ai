@@ -7,26 +7,12 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 
-const DEMO_ACCOUNTS = [
-  { label: "Pro", email: "demo.pro@unmask.local" },
-  { label: "Basic", email: "demo.basic@unmask.local" },
-  { label: "Free", email: "demo.free@unmask.local" },
-] as const;
-
-const DEMO_PASSWORD = "demo1234";
-
 export default function LoginPage() {
   const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
-  function applyDemo(demoEmail: string) {
-    setEmail(demoEmail);
-    setPassword(DEMO_PASSWORD);
-    setError(null);
-  }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -89,25 +75,6 @@ export default function LoginPage() {
               Register
             </Link>
           </span>
-        </div>
-        <div className="mt-6 rounded-xl border border-border/70 bg-primary/10 p-3 text-xs text-muted">
-          <p className="font-medium text-foreground mb-2">Demo accounts</p>
-          <p className="mb-2">
-            All accounts use password{" "}
-            <code className="font-mono text-accent">{DEMO_PASSWORD}</code>. Click to autofill.
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {DEMO_ACCOUNTS.map((account) => (
-              <button
-                key={account.email}
-                type="button"
-                onClick={() => applyDemo(account.email)}
-                className="rounded-lg border border-border bg-surface/60 px-2.5 py-1.5 font-mono hover:border-accent hover:text-accent transition-colors"
-              >
-                {account.label}: {account.email}
-              </button>
-            ))}
-          </div>
         </div>
       </div>
     </div>
